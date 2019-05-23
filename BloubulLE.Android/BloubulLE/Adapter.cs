@@ -7,6 +7,7 @@ using Android.Bluetooth;
 using Android.Bluetooth.LE;
 using Android.OS;
 using DH.BloubulLE.Contracts;
+using DH.BloubulLE.Extensions;
 using Java.Util;
 using Object = Java.Lang.Object;
 
