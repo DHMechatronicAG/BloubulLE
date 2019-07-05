@@ -2,12 +2,14 @@ using Android.App;
 using Android.Bluetooth;
 using Android.Content;
 using Android.Content.PM;
+using Android.Runtime;
 using DH.BloubulLE.BroadcastReceivers;
 using DH.BloubulLE.Contracts;
 using DH.BloubulLE.Extensions;
 
 namespace DH.BloubulLE
 {
+    [Preserve(AllMembers = true)]
     public class BleImplementation : BleImplementationBase
     {
         private BluetoothManager _bluetoothManager;

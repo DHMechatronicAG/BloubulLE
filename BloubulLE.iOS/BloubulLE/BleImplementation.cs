@@ -2,9 +2,11 @@ using CoreBluetooth;
 using CoreFoundation;
 using DH.BloubulLE.Contracts;
 using DH.BloubulLE.Extensions;
+using Foundation;
 
 namespace DH.BloubulLE
 {
+    [Preserve(AllMembers = true)]
     public class BleImplementation : BleImplementationBase
     {
         private CBCentralManager _centralManager;
