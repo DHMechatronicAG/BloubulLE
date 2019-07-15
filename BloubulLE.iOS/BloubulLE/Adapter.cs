@@ -132,7 +132,7 @@ namespace DH.BloubulLE
 
         public override IList<IDevice> ConnectedDevices => this._deviceConnectionRegistry.Values.ToList();
 
-        protected override async Task StartScanningForDevicesNativeAsync(Guid[] serviceUuids,
+        protected override async Task<bool> StartScanningForDevicesNativeAsync(Guid[] serviceUuids,
             Boolean allowDuplicatesKey, CancellationToken scanCancellationToken)
         {
             // Wait for the PoweredOn state
@@ -153,6 +153,8 @@ namespace DH.BloubulLE
             this.DiscoveredDevices.Clear();
             this._centralManager.ScanForPeripherals(serviceCbuuids,
                 new PeripheralScanningOptions {AllowDuplicatesKey = allowDuplicatesKey});
+
+            return true;
         }
 
         protected override void DisconnectDeviceNative(IDevice device)

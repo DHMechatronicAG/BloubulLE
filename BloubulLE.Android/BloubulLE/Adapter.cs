@@ -51,21 +51,19 @@ namespace DH.BloubulLE
         /// </summary>
         public Dictionary<String, IDevice> ConnectedDeviceRegistry { get; }
 
-        protected override Task StartScanningForDevicesNativeAsync(Guid[] serviceUuids, Boolean allowDuplicatesKey,
+        protected override Task<Boolean> StartScanningForDevicesNativeAsync(Guid[] serviceUuids, Boolean allowDuplicatesKey,
             CancellationToken scanCancellationToken)
         {
             // clear out the list
             this.DiscoveredDevices.Clear();
 
             if (Build.VERSION.SdkInt < BuildVersionCodes.Lollipop)
-                this.StartScanningOld(serviceUuids);
+                return Task.FromResult(this.StartScanningOld(serviceUuids));
             else
-                this.StartScanningNew(serviceUuids);
-
-            return Task.FromResult(true);
+                return Task.FromResult(this.StartScanningNew(serviceUuids));
         }
 
-        private void StartScanningOld(Guid[] serviceUuids)
+        private bool StartScanningOld(Guid[] serviceUuids)
         {
             Boolean hasFilter = serviceUuids?.Any() ?? false;
             UUID[] uuids = null;
@@ -74,9 +72,11 @@ namespace DH.BloubulLE
 #pragma warning disable 618
             this._bluetoothAdapter.StartLeScan(uuids, this._api18ScanCallback);
 #pragma warning restore 618
+
+            return true;
         }
 
-        private void StartScanningNew(Guid[] serviceUuids)
+        private bool StartScanningNew(Guid[] serviceUuids)
         {
             Boolean hasFilter = serviceUuids?.Any() ?? false;
             List<ScanFilter> scanFilters = null;
@@ -101,10 +101,14 @@ namespace DH.BloubulLE
                 Trace.Message($"Adapter >=21: Starting a scan for devices. ScanMode: {this.ScanMode}");
                 if (hasFilter) Trace.Message($"ScanFilters: {String.Join(", ", serviceUuids)}");
                 this._bluetoothAdapter.BluetoothLeScanner.StartScan(scanFilters, ssb.Build(), this._api21ScanCallback);
+
+                return true;
             }
             else
             {
+
                 Trace.Message("Adapter >= 21: Scan failed. Bluetooth is probably off");
+                return false;
             }
         }
 

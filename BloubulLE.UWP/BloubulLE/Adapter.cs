@@ -36,7 +36,7 @@ namespace DH.BloubulLE
 
         public override IList<IDevice> ConnectedDevices => this.ConnectedDeviceRegistry.Values.ToList();
 
-        protected override Task StartScanningForDevicesNativeAsync(Guid[] serviceUuids, Boolean allowDuplicatesKey,
+        protected override Task<bool> StartScanningForDevicesNativeAsync(Guid[] serviceUuids, Boolean allowDuplicatesKey,
             CancellationToken scanCancellationToken)
         {
             Boolean hasFilter = serviceUuids?.Any() ?? false;

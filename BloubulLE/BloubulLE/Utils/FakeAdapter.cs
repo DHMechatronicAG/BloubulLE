@@ -17,11 +17,11 @@ namespace DH.BloubulLE.Utils
             return Task.FromResult<IDevice>(null);
         }
 
-        protected override Task StartScanningForDevicesNativeAsync(Guid[] serviceUuids, Boolean allowDuplicatesKey,
+        protected override Task<bool> StartScanningForDevicesNativeAsync(Guid[] serviceUuids, Boolean allowDuplicatesKey,
             CancellationToken scanCancellationToken)
         {
             TraceUnavailability();
-            return Task.FromResult(0);
+            return Task.FromResult(true);
         }
 
         protected override void StopScanNative()

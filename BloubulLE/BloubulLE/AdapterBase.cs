@@ -41,14 +41,14 @@ namespace DH.BloubulLE
 
         public abstract IList<IDevice> ConnectedDevices { get; }
 
-        public async Task StartScanningForDevicesAsync(Guid[] serviceUuids = null,
+        public async Task<bool> StartScanningForDevicesAsync(Guid[] serviceUuids = null,
             Func<IDevice, Boolean> deviceFilter = null, Boolean allowDuplicatesKey = false,
             CancellationToken cancellationToken = default(CancellationToken))
         {
             if (this.IsScanning)
             {
                 Trace.Message("Adapter: Already scanning!");
-                return;
+                return true;
             }
 
             this.IsScanning = true;
@@ -60,19 +60,30 @@ namespace DH.BloubulLE
             {
                 using (cancellationToken.Register(() => this._scanCancellationTokenSource?.Cancel()))
                 {
-                    await this.StartScanningForDevicesNativeAsync(serviceUuids, allowDuplicatesKey,
+                    bool tResult = await this.StartScanningForDevicesNativeAsync(serviceUuids, allowDuplicatesKey,
                         this._scanCancellationTokenSource.Token);
-                    await Task.Delay(this.ScanTimeout, this._scanCancellationTokenSource.Token);
-                    Trace.Message("Adapter: Scan timeout has elapsed.");
+
+                    // If the scan failed to start, we dont need to wait around for nothing
+                    if (tResult) { 
+                        await Task.Delay(this.ScanTimeout, this._scanCancellationTokenSource.Token);
+                        Trace.Message("Adapter: Scan timeout has elapsed.");
+                    }
+
                     this.CleanupScan();
                     this.ScanTimeoutElapsed(this, new System.EventArgs());
+
+                    return tResult;
                 }
             }
             catch (TaskCanceledException)
             {
                 this.CleanupScan();
                 Trace.Message("Adapter: Scan was cancelled.");
+
+                return true;
             }
+
+            return false;
         }
 
         public Task StopScanningForDevicesAsync()
@@ -224,7 +235,7 @@ namespace DH.BloubulLE
             });
         }
 
-        protected abstract Task StartScanningForDevicesNativeAsync(Guid[] serviceUuids, Boolean allowDuplicatesKey,
+        protected abstract Task<bool> StartScanningForDevicesNativeAsync(Guid[] serviceUuids, Boolean allowDuplicatesKey,
             CancellationToken scanCancellationToken);
 
         protected abstract void StopScanNative();
