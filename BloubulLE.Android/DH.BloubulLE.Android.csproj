@@ -70,9 +70,9 @@
     <Compile Include="BloubulLE\CallbackEventArgs\MtuRequestCallbackEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BloubulLE\DH.BlouebulLE.csproj">
-      <Project>{e8b75772-8864-44a5-a1ec-251e17e709f4}</Project>
-      <Name>DH.BlouebulLE</Name>
+    <ProjectReference Include="..\BloubulLE\DH.BloubulLE.csproj">
+      <Project>{31D362BB-E9CB-48DE-A588-8FAE85D02303}</Project>
+      <Name>DH.BloubulLE</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
