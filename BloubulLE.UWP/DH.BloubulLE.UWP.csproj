@@ -127,12 +127,6 @@
       <Version>6.0.0</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\BloubulLE\DH.BloubulLE.csproj">
-      <Project>{31D362BB-E9CB-48DE-A588-8FAE85D02303}</Project>
-      <Name>DH.BloubulLE</Name>
-    </ProjectReference>
-  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
